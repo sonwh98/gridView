@@ -1,8 +1,6 @@
 package com.datayumyum.pos;
 
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.Toast;
+import android.widget.*;
 import com.datayumyum.pos.util.SystemUiHider;
 
 import android.app.Activity;
@@ -26,9 +24,17 @@ public class GridViewActivity extends Activity {
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(this));
+        final TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                TableRow tr = new TableRow(getApplicationContext());
+                tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+                TextView textView = new TextView(getApplicationContext());
+                textView.setText("foobar");
+                textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+                tr.addView(textView);
+                tableLayout.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
                 Toast.makeText(GridViewActivity.this, "" + position, Toast.LENGTH_SHORT).show();
             }
         });

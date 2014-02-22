@@ -31,7 +31,7 @@
                 android:layout_width="fill_parent"
                 android:layout_weight="5">
 
-            <TableLayout
+            <TableLayout android:id="@+id/tableLayout"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:orientation="horizontal"
@@ -46,16 +46,19 @@
                     <TextView
                             android:id="@+id/textView1"
                             android:text="Quantity"
+                            android:padding="5dip"
                             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                     <TextView
                             android:id="@+id/textView2"
                             android:text="Description"
+                            android:padding="5dip"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             />
                     <TextView
                             android:id="@+id/textView3"
                             android:text="Price"
+                            android:padding="5dip"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             />
                     <TextView
