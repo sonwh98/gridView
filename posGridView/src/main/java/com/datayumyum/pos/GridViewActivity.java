@@ -1,19 +1,11 @@
 package com.datayumyum.pos;
 
-import android.view.MotionEvent;
 import android.widget.*;
-import com.datayumyum.pos.util.SystemUiHider;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
- */
 public class GridViewActivity extends Activity {
 
 
@@ -29,16 +21,18 @@ public class GridViewActivity extends Activity {
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(this));
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                TableRow tr = new TableRow(getApplicationContext());
-                tr.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TableRow row = (TableRow) v;
-                        tableLayout.removeView(row);
 
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                final TableRow tr = new TableRow(getApplicationContext());
+                tr.setOnTouchListener(new SwipeListener(getApplicationContext()) {
+                    @Override
+                    public void onSwipeRight() {
+                        tableLayout.removeView(tr);
+                        Toast.makeText(GridViewActivity.this, "right", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
                 tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
                 for (int i = 0; i < 4; i++) {
                     TextView textView = new TextView(getApplicationContext());
