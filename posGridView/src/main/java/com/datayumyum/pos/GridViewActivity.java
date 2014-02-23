@@ -1,13 +1,17 @@
 package com.datayumyum.pos;
 
+import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
-public class GridViewActivity extends Activity {
 
+public class GridViewActivity extends Activity {
+    final static String TAG = "com.datayumyum.pos.GridViewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,10 @@ public class GridViewActivity extends Activity {
                 tr.setOnTouchListener(new SwipeListener(getApplicationContext()) {
                     @Override
                     public void onSwipeRight() {
+                        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.slide_in_left);
+                        animation.setDuration(2000);
+                        animation.setFillAfter(true);
+                        tr.startAnimation(animation);
                         tableLayout.removeView(tr);
                         Toast.makeText(GridViewActivity.this, "right", Toast.LENGTH_SHORT).show();
                     }
