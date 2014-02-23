@@ -1,5 +1,6 @@
 package com.datayumyum.pos;
 
+import android.view.MotionEvent;
 import android.widget.*;
 import com.datayumyum.pos.util.SystemUiHider;
 
@@ -22,13 +23,22 @@ public class GridViewActivity extends Activity {
 
         setContentView(R.layout.activity_grid_view);
 
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this));
         final TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
         final ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView1);
+
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview.setAdapter(new ImageAdapter(this));
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 TableRow tr = new TableRow(getApplicationContext());
+                tr.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TableRow row = (TableRow) v;
+                        tableLayout.removeView(row);
+
+                    }
+                });
                 tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
                 for (int i = 0; i < 4; i++) {
                     TextView textView = new TextView(getApplicationContext());
