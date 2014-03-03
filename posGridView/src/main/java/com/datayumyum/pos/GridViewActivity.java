@@ -1,6 +1,6 @@
 package com.datayumyum.pos;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
@@ -8,6 +8,9 @@ import android.widget.*;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class GridViewActivity extends Activity {
@@ -18,41 +21,56 @@ public class GridViewActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_grid_view);
+        //////
+        String[] items = new String[1];
+        for (int i = 0; i < items.length; i++) {
+            items[i] = "Item " + (i + 1);
+        }
+        final ListView listView = (ListView) findViewById(R.id.list);
+        final ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1,
+                new ArrayList<String>(Arrays.asList(items)));
+        listView.setAdapter(mAdapter);
 
-        final TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
-        final ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView1);
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                    @Override
+                    public boolean canDismiss(int position) {
+                        return true;
+                    }
+
+                    @Override
+                    public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                        for (int position : reverseSortedPositions) {
+                            mAdapter.remove(mAdapter.getItem(position));
+                        }
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+        listView.setOnTouchListener(touchListener);
+        listView.setOnScrollListener(touchListener.makeScrollListener());
+        ///////
+
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(this));
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                final TableRow tr = new TableRow(getApplicationContext());
-                tr.setOnTouchListener(new SwipeListener(getApplicationContext()) {
-                    @Override
-                    public void onSwipeRight() {
-                        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.slide_in_left);
-                        animation.setDuration(2000);
-                        animation.setFillAfter(true);
-                        tr.startAnimation(animation);
-                        tableLayout.removeView(tr);
-                        Toast.makeText(GridViewActivity.this, "right", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-                tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-                for (int i = 0; i < 4; i++) {
-                    TextView textView = new TextView(getApplicationContext());
-                    textView.setText("foobar" + i);
-                    textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-                    textView.setPadding(5, 5, 5, 5);
-                    tr.addView(textView);
-                }
-                tableLayout.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
-                scrollView.fullScroll(View.FOCUS_DOWN);
+                mAdapter.add("foobar" + position);
             }
         });
     }
 
+    private class ShoppingCart extends ArrayAdapter {
+
+        public ShoppingCart(Context context, int resource) {
+            super(context, resource);
+        }
+
+        public ShoppingCart() {
+            this(null, 0);
+        }
+    }
 }

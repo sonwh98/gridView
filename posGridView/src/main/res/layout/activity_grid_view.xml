@@ -47,6 +47,8 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
                         android:id="@+id/textView2"
                         android:text="Description"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -55,6 +57,8 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
                         android:id="@+id/textView3"
                         android:text="Price"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -63,27 +67,22 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
                         android:id="@+id/SubTotal"
                         android:text="SubTotal"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:background="@drawable/back"/>
             </LinearLayout>
 
-            <ScrollView
-                    android:layout_height="wrap_content"
-                    android:id="@+id/scrollView1"
-                    android:layout_width="fill_parent"
-                    >
-
-                <TableLayout
-                        android:id="@+id/tableLayout"
+                <ListView
+                        android:id="@+id/list"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:orientation="horizontal"
-                        >
+                        android:transcriptMode="alwaysScroll"
+                       >
+                </ListView>
 
-                </TableLayout>
-            </ScrollView>
         </LinearLayout>
 
     </LinearLayout>
