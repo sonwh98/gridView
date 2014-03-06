@@ -29,22 +29,9 @@ public class GridViewActivity extends Activity {
             items[i] = "Item " + (i + 1);
         }
         final ListView listView = (ListView) findViewById(R.id.list);
-        final ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                new ArrayList<String>(Arrays.asList(items)));
+        final ShoppingCart shoppingCart = new ShoppingCart();
 
-
-        final ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("Quantity", "2");
-        map.put("Description", "Vietnamese Hoagie");
-        map.put("Price", "$5.00");
-        map.put("SubTotal", "$10.00");
-        mylist.add(map);
-        final SimpleAdapter adapter = new SimpleAdapter(this, mylist, R.layout.row,
-                new String[]{"Quantity", "Description", "Price", "SubTotal"}, new int[]{R.id.QUANTITY_CELL, R.id.DESCRIPTION_CELL, R.id.PRICE_CELL, R.id.SUB_TOTAL_CELL});
-        listView.setAdapter(mAdapter);
+        listView.setAdapter(shoppingCart);
 
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
@@ -56,9 +43,8 @@ public class GridViewActivity extends Activity {
                     @Override
                     public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                         for (int position : reverseSortedPositions) {
-                            mAdapter.remove(mAdapter.getItem(position));
+                            shoppingCart.remove(position);
                         }
-                        mAdapter.notifyDataSetChanged();
                     }
                 });
         listView.setOnTouchListener(touchListener);
@@ -71,7 +57,7 @@ public class GridViewActivity extends Activity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                mAdapter.add("foobar" + position);
+                shoppingCart.add("foobar" + position);
             }
         });
     }
@@ -125,6 +111,21 @@ public class GridViewActivity extends Activity {
             textViewMap.get("subTotal").setText(map.get("subTotal"));
 
             return convertView;
+        }
+
+        public void remove(int position) {
+            list.remove(position);
+            notifyDataSetChanged();
+        }
+
+        public void add(String str) {
+            HashMap<String, String> item = new HashMap<String, String>();
+            item.put("quantity", "1");
+            item.put("description", str);
+            item.put("price", str);
+            item.put("subTotal", str);
+            list.add(item);
+            notifyDataSetChanged();
         }
     }
 }
