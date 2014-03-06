@@ -1,6 +1,5 @@
 package com.datayumyum.pos;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
