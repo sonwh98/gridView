@@ -1,5 +1,6 @@
 package com.datayumyum.pos;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -7,6 +8,7 @@ import android.widget.*;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import org.mozilla.javascript.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,13 +21,18 @@ public class GridViewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context rhino = Context.enter();
+        rhino.setOptimizationLevel(-1);
+        Scriptable scope = rhino.initStandardObjects();
 
+        String source = "function inc(i){ return 'abc'}";
+        // Note the forth argument is 1, which means the JavaScript source has
+        // been compressed to only one line using something like YUI
+        rhino.evaluateString(scope, source, "ScriptAPI", 1, null);
+        Function function = (Function) scope.get("inc", scope);
+        Object[] functionParams = new Object[] { "Android" };
+        Object result = function.call(rhino, scope, scope, functionParams);
         setContentView(R.layout.activity_grid_view);
-        //////
-        String[] items = new String[1];
-        for (int i = 0; i < items.length; i++) {
-            items[i] = "Item " + (i + 1);
-        }
         final ListView listView = (ListView) findViewById(R.id.list);
         final ShoppingCart shoppingCart = new ShoppingCart();
 
@@ -59,6 +66,7 @@ public class GridViewActivity extends Activity {
             }
         });
     }
+
 
     private class ShoppingCart extends BaseAdapter {
         ArrayList<HashMap> list;
