@@ -25,13 +25,18 @@ public class GridViewActivity extends Activity {
         rhino.setOptimizationLevel(-1);
         Scriptable scope = rhino.initStandardObjects();
 
-        String source = "function inc(i){ return 'abc'}";
+        String source = "{items:[{name:'foo', price:2}, {name:'bar',price:3}]}";
         // Note the forth argument is 1, which means the JavaScript source has
         // been compressed to only one line using something like YUI
-        rhino.evaluateString(scope, source, "ScriptAPI", 1, null);
-        Function function = (Function) scope.get("inc", scope);
-        Object[] functionParams = new Object[] { "Android" };
-        Object result = function.call(rhino, scope, scope, functionParams);
+        NativeArray items = (NativeArray) rhino.evaluateString(scope, source, "ScriptAPI", 1, null);
+        NativeObject item0 = (NativeObject) items.get(0, null);
+        assert "foo".equals(item0.get("name", null));
+        assert item0.get("price", null).equals(2.0);
+
+        NativeObject item1 = (NativeObject) items.get(1, null);
+        assert item1.get("name", null).equals("bar");
+        assert item0.get("price", null).equals(3.0);
+
         setContentView(R.layout.activity_grid_view);
         final ListView listView = (ListView) findViewById(R.id.list);
         final ShoppingCart shoppingCart = new ShoppingCart();
