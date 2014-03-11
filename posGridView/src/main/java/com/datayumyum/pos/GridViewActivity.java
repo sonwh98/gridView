@@ -28,7 +28,13 @@ public class GridViewActivity extends Activity {
 
         try {
             JSONObject jObject = new JSONObject(json);
-            JSONArray items = (JSONArray) jObject.get("items");
+            JSONArray items = (JSONArray) jObject.get("sandwich");
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject o = (JSONObject) items.get(i);
+                String name = o.getString("name");
+                Double price = o.getDouble("price");
+                Log.w(TAG, name + ":" + price);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
