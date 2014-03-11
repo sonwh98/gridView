@@ -1,10 +1,10 @@
-{items: [
+{"items": [
     {
-        name: "foo",
-        price: 2
+        "name": "foo",
+        "price": 2
     },
     {
-        name: "bar",
-        price: 3
+        "name": "bar",
+        "price": 3
     }
 ]}

@@ -8,7 +8,9 @@ import android.widget.*;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import org.mozilla.javascript.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -22,21 +24,14 @@ public class GridViewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Context rhino = Context.enter();
-        rhino.setOptimizationLevel(-1);
-        Scriptable scope = rhino.initStandardObjects();
+        String json = getStringReader();
 
-        StringReader stringReader = getStringReader();
         try {
-            NativeArray items = (NativeArray) rhino.evaluateReader(scope, stringReader, "ScriptAPI", 1, null);
-            NativeObject item0 = (NativeObject) items.get(0, null);
-            assert "foo".equals(item0.get("name", null));
-            assert item0.get("price", null).equals(2.0);
+            JSONObject jObject = new JSONObject(json);
+            JSONArray items = (JSONArray) jObject.get("items");
 
-            NativeObject item1 = (NativeObject) items.get(1, null);
-            assert item1.get("name", null).equals("bar");
-            assert item0.get("price", null).equals(3.0);
-        } catch (IOException ex) {
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         setContentView(R.layout.activity_grid_view);
@@ -74,21 +69,16 @@ public class GridViewActivity extends Activity {
         });
     }
 
-    private StringReader getStringReader() {
+    private String getStringReader() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.catalog)));
-        StringReader stringReader = null;
+        String json = "";
         try {
-            String json = "";
             String line;
             do {
                 line = reader.readLine();
                 if (line != null)
                     json += line + "\n";
             } while (line != null);
-            json = json.trim();
-
-            stringReader = new StringReader(json);
-
         } catch (IOException ex) {
             Log.e(TAG, ex.getMessage());
         } finally {
@@ -98,7 +88,7 @@ public class GridViewActivity extends Activity {
 
             }
         }
-        return stringReader;
+        return json.trim();
     }
 
 

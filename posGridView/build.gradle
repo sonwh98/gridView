@@ -32,8 +32,6 @@ android {
 }
 
 dependencies {
-    compile 'rhino:js:1.7R2'
-
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     // The Support Repository (separate from the corresponding library) can be found in the Extras category.
     // compile 'com.android.support:support-v4:18.0.0'
