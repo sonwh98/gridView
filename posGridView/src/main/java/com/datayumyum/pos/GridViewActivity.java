@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import org.mozilla.javascript.*;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,17 +26,18 @@ public class GridViewActivity extends Activity {
         rhino.setOptimizationLevel(-1);
         Scriptable scope = rhino.initStandardObjects();
 
-        String source = "{items:[{name:'foo', price:2}, {name:'bar',price:3}]}";
-        // Note the forth argument is 1, which means the JavaScript source has
-        // been compressed to only one line using something like YUI
-        NativeArray items = (NativeArray) rhino.evaluateString(scope, source, "ScriptAPI", 1, null);
-        NativeObject item0 = (NativeObject) items.get(0, null);
-        assert "foo".equals(item0.get("name", null));
-        assert item0.get("price", null).equals(2.0);
+        StringReader stringReader = getStringReader();
+        try {
+            NativeArray items = (NativeArray) rhino.evaluateReader(scope, stringReader, "ScriptAPI", 1, null);
+            NativeObject item0 = (NativeObject) items.get(0, null);
+            assert "foo".equals(item0.get("name", null));
+            assert item0.get("price", null).equals(2.0);
 
-        NativeObject item1 = (NativeObject) items.get(1, null);
-        assert item1.get("name", null).equals("bar");
-        assert item0.get("price", null).equals(3.0);
+            NativeObject item1 = (NativeObject) items.get(1, null);
+            assert item1.get("name", null).equals("bar");
+            assert item0.get("price", null).equals(3.0);
+        } catch (IOException ex) {
+        }
 
         setContentView(R.layout.activity_grid_view);
         final ListView listView = (ListView) findViewById(R.id.list);
@@ -70,6 +72,33 @@ public class GridViewActivity extends Activity {
                 shoppingCart.add("foobar" + position);
             }
         });
+    }
+
+    private StringReader getStringReader() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.catalog)));
+        StringReader stringReader = null;
+        try {
+            String json = "";
+            String line;
+            do {
+                line = reader.readLine();
+                if (line != null)
+                    json += line + "\n";
+            } while (line != null);
+            json = json.trim();
+
+            stringReader = new StringReader(json);
+
+        } catch (IOException ex) {
+            Log.e(TAG, ex.getMessage());
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+
+            }
+        }
+        return stringReader;
     }
 
 

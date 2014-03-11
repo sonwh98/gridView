@@ -1,0 +1,10 @@
+{items: [
+    {
+        name: "foo",
+        price: 2
+    },
+    {
+        name: "bar",
+        price: 3
+    }
+]}
