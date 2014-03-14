@@ -8,11 +8,7 @@ import android.widget.*;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,21 +20,6 @@ public class GridViewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String json = getStringReader();
-
-        try {
-            JSONObject jObject = new JSONObject(json);
-            JSONArray items = (JSONArray) jObject.get("sandwich");
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject o = (JSONObject) items.get(i);
-                String name = o.getString("name");
-                Double price = o.getDouble("price");
-                Log.w(TAG, name + ":" + price);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         setContentView(R.layout.activity_grid_view);
         final ListView listView = (ListView) findViewById(R.id.list);
@@ -75,27 +56,7 @@ public class GridViewActivity extends Activity {
         });
     }
 
-    private String getStringReader() {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.catalog)));
-        String json = "";
-        try {
-            String line;
-            do {
-                line = reader.readLine();
-                if (line != null)
-                    json += line + "\n";
-            } while (line != null);
-        } catch (IOException ex) {
-            Log.e(TAG, ex.getMessage());
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
 
-            }
-        }
-        return json.trim();
-    }
 
 
     private class ShoppingCart extends BaseAdapter {

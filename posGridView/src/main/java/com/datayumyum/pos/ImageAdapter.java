@@ -1,24 +1,49 @@
 package com.datayumyum.pos;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * Created by sonnyto on 2/17/14.
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
+    private static final String TAG = "com.datayumyum.pos.ImageAdapter";
+
     public ImageAdapter(Context gridViewActivity) {
         mContext = gridViewActivity;
+        String json = getStringReader();
+
+        try {
+            JSONObject jObject = new JSONObject(json);
+            JSONArray items = (JSONArray) jObject.get("Sandwiches");
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject o = (JSONObject) items.get(i);
+                String name = o.getString("name");
+                Double price = o.getDouble("price");
+                Log.w(TAG, name + ":" + price);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getCount() {
-        return  mThumbIds.length;
+        return mThumbIds.length;
     }
 
     @Override
@@ -45,6 +70,28 @@ public class ImageAdapter extends BaseAdapter {
 
         imageView.setImageResource(mThumbIds[position]);
         return imageView;
+    }
+
+    private String getStringReader() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(mContext.getResources().openRawResource(R.raw.catalog)));
+        String json = "";
+        try {
+            String line;
+            do {
+                line = reader.readLine();
+                if (line != null)
+                    json += line + "\n";
+            } while (line != null);
+        } catch (IOException ex) {
+            Log.e(TAG, ex.getMessage());
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+
+            }
+        }
+        return json.trim();
     }
 
     private Integer[] mThumbIds = {
