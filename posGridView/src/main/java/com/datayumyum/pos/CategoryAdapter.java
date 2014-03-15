@@ -14,26 +14,36 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sonnyto on 2/17/14.
  */
-public class ImageAdapter extends BaseAdapter {
+public class CategoryAdapter extends BaseAdapter {
     private Context mContext;
-    private static final String TAG = "com.datayumyum.pos.ImageAdapter";
+    private static final String TAG = "com.datayumyum.pos.CategoryAdapter";
+    private List<ItemButton> itemButtonList;
 
-    public ImageAdapter(Context gridViewActivity) {
+    public CategoryAdapter(Context gridViewActivity) {
         mContext = gridViewActivity;
+        itemButtonList = new ArrayList<ItemButton>();
         String json = getStringReader();
 
         try {
             JSONObject jObject = new JSONObject(json);
-            JSONArray items = (JSONArray) jObject.get("Sandwiches");
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject o = (JSONObject) items.get(i);
+            JSONArray jSonItems = (JSONArray) jObject.get("Entrees");
+            for (int i = 0; i < jSonItems.length(); i++) {
+                JSONObject o = (JSONObject) jSonItems.get(i);
                 String name = o.getString("name");
                 Double price = o.getDouble("price");
                 Log.w(TAG, name + ":" + price);
+                ItemButton itemButton = new ItemButton(mContext, name);
+                itemButton.setLayoutParams(new GridView.LayoutParams(85, 85));
+                itemButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                itemButton.setPadding(8, 8, 8, 8);
+                itemButton.setImageResource(mThumbIds[i]);
+                itemButtonList.add(itemButton);
             }
 
         } catch (JSONException e) {
@@ -43,7 +53,7 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mThumbIds.length;
+        return itemButtonList.size();
     }
 
     @Override
@@ -58,17 +68,8 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {  // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-        } else {
-            imageView = (ImageView) convertView;
-        }
-
-        imageView.setImageResource(mThumbIds[position]);
+        Log.w(TAG, itemButtonList.size() + " position=" + position);
+        ImageView imageView = itemButtonList.get(position);
         return imageView;
     }
 
