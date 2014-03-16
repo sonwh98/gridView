@@ -2,6 +2,8 @@ package com.datayumyum.pos;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.widget.ImageView;
 
 /**
@@ -18,5 +20,9 @@ public class ItemButton extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Paint p = new Paint();
+        p.setColor(Color.BLACK);
+
+        canvas.drawText(name, 10, 10, p);
     }
 }
