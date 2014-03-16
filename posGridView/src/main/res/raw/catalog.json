@@ -22,37 +22,26 @@
             "name": "Lemongrass Chicken",
             "price": 6.25
         },
-
         {
             "name": "Lemongrass Beef",
             "price": 6.25
         },
-
-
         {
             "name": "Lemongrass Pork Chop",
             "price": 6.25
         },
-
-
         {
             "name": "Vietnamese Grilled Pork",
             "price": 6.25
         },
-
-
         {
             "name": "Vietnamese Ham",
             "price": 6.25
         },
-
-
         {
             "name": "Vietnamese Meat",
             "price": 6.25
         },
-
-
         {
             "name": "Lemongrass Tofu",
             "price": 6.25
@@ -61,6 +50,4 @@
             "name": "Tofu sauteed with onions and mushrooms",
             "price": 6.25
         }
-
-
     ]}

@@ -1,5 +1,6 @@
 package com.datayumyum.pos;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -8,6 +9,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +27,10 @@ public class GridViewActivity extends Activity {
         setContentView(R.layout.activity_grid_view);
         final ListView listView = (ListView) findViewById(R.id.list);
         final ShoppingCart shoppingCart = new ShoppingCart();
-
         listView.setAdapter(shoppingCart);
+
+        final String jsonCatalog = getStringReader();
+        final ItemRepository itemRepository = new ItemRepository(jsonCatalog);
 
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
@@ -46,7 +52,7 @@ public class GridViewActivity extends Activity {
 
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new CategoryAdapter(this));
+        gridview.setAdapter(new CategoryAdapter(this, itemRepository));
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -56,7 +62,27 @@ public class GridViewActivity extends Activity {
     }
 
 
+    private String getStringReader() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.catalog)));
+        String json = "";
+        try {
+            String line;
+            do {
+                line = reader.readLine();
+                if (line != null)
+                    json += line + "\n";
+            } while (line != null);
+        } catch (IOException ex) {
+            Log.e(TAG, ex.getMessage());
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
 
+            }
+        }
+        return json.trim();
+    }
 
     private class ShoppingCart extends BaseAdapter {
         ArrayList<HashMap> list;
