@@ -29,8 +29,6 @@ public class CategoryAdapter extends BaseAdapter {
         for (int i = 0; i < jSonItems.size(); i++) {
             Item o = jSonItems.get(i);
             String name = (String) o.get("name");
-            Double price = (Double) o.get("price");
-            Log.w(TAG, name + ":" + price);
             ItemButton itemButton = new ItemButton(mContext, name);
             itemButton.setLayoutParams(new GridView.LayoutParams(85, 85));
             itemButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -58,7 +56,6 @@ public class CategoryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.w(TAG, itemButtonList.size() + " position=" + position);
         ImageView imageView = itemButtonList.get(position);
         return imageView;
     }
