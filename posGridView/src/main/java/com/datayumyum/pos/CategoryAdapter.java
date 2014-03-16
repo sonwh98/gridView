@@ -2,41 +2,50 @@ package com.datayumyum.pos;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by sonnyto on 2/17/14.
  */
 public class CategoryAdapter extends BaseAdapter {
-    private Context mContext;
+    private Context context;
     private static final String TAG = "com.datayumyum.pos.CategoryAdapter";
-    private List<ItemButton> itemButtonList;
+    private List<View> itemButtonList;
     ItemRepository itemRepository;
+    Random random = new Random();
 
     public CategoryAdapter(Context gridViewActivity, ItemRepository itemRepository) {
-        mContext = gridViewActivity;
+        context = gridViewActivity;
         this.itemRepository = itemRepository;
 
-        itemButtonList = new ArrayList<ItemButton>();
+        itemButtonList = new ArrayList<View>();
         List<Item> jSonItems = itemRepository.groupItemByCategory("Entrees");
         for (int i = 0; i < jSonItems.size(); i++) {
             Item o = jSonItems.get(i);
             String name = (String) o.get("name");
-            ItemButton itemButton = new ItemButton(mContext, name);
-            itemButton.setLayoutParams(new GridView.LayoutParams(85, 85));
-            itemButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            itemButton.setPadding(8, 8, 8, 8);
-            itemButton.setImageResource(mThumbIds[i]);
+            View itemButton = createImageButton(name);
             itemButtonList.add(itemButton);
         }
 
+    }
+
+    View createImageButton(String label) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View itemButton = inflater.inflate(R.layout.item_button, null);
+        ImageButton imageButton = (ImageButton) itemButton.findViewById(R.id.item_image_button);
+        int i = random.nextInt(mThumbIds.length - 1);
+        Log.w(TAG, "i=" + i);
+        imageButton.setImageResource(mThumbIds[i]);
+        TextView itemLabel = (TextView) itemButton.findViewById(R.id.item_label);
+        itemLabel.setText(label);
+        return itemButton;
     }
 
     @Override
@@ -56,7 +65,7 @@ public class CategoryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView = itemButtonList.get(position);
+        View imageView = itemButtonList.get(position);
         return imageView;
     }
 
