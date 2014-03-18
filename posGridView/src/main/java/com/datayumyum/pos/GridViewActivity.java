@@ -112,20 +112,20 @@ public class GridViewActivity extends Activity {
     }
 
     private class ShoppingCart extends BaseAdapter {
-        ArrayList<HashMap> list;
+        ArrayList<HashMap> lineItems;
 
         ShoppingCart() {
-            list = new ArrayList<HashMap>();
+            lineItems = new ArrayList<HashMap>();
         }
 
         @Override
         public int getCount() {
-            return list.size();
+            return lineItems.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return list.get(position);
+            return lineItems.get(position);
         }
 
         @Override
@@ -153,7 +153,7 @@ public class GridViewActivity extends Activity {
                 textViewMap = (Map) convertView.getTag();
             }
 
-            HashMap<String, String> map = list.get(position);
+            HashMap<String, String> map = lineItems.get(position);
             textViewMap.get("quantity").setText(map.get("quantity"));
             textViewMap.get("description").setText(map.get("description"));
             textViewMap.get("price").setText(map.get("price"));
@@ -163,7 +163,7 @@ public class GridViewActivity extends Activity {
         }
 
         public void remove(int position) {
-            list.remove(position);
+            lineItems.remove(position);
             notifyDataSetChanged();
         }
 
@@ -173,8 +173,12 @@ public class GridViewActivity extends Activity {
             item.put("description", str);
             item.put("price", str);
             item.put("subTotal", str);
-            list.add(item);
+            lineItems.add(item);
             notifyDataSetChanged();
+        }
+
+        public void add(Item item) {
+
         }
     }
 
