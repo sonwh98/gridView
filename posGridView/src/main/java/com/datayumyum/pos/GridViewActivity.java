@@ -18,18 +18,30 @@ import java.util.*;
 public class GridViewActivity extends Activity {
     final static String TAG = "com.datayumyum.pos.GridViewActivity";
     private ItemRepository itemRepository;
+    private ShoppingCart shoppingCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_grid_view);
-        final ListView listView = (ListView) findViewById(R.id.list);
-        final ShoppingCart shoppingCart = new ShoppingCart();
-        listView.setAdapter(shoppingCart);
 
         final String jsonCatalog = getStringReader();
         itemRepository = new ItemRepository(jsonCatalog);
+        shoppingCart = new ShoppingCart();
+
+        configureCategoryViews();
+        configureLineItemView();
+    }
+
+    private void configureCategoryViews() {
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        List<View> itemButtonList = createButtonsFor("Entrees");
+        gridview.setAdapter(new CategoryAdapter(itemButtonList));
+    }
+
+    private void configureLineItemView() {
+        ListView listView = (ListView) findViewById(R.id.list);
+        listView.setAdapter(shoppingCart);
 
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
@@ -47,12 +59,6 @@ public class GridViewActivity extends Activity {
                 });
         listView.setOnTouchListener(touchListener);
         listView.setOnScrollListener(touchListener.makeScrollListener());
-        ///////
-
-
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        List<View> itemButtonList = createButtonsFor("Entrees");
-        gridview.setAdapter(new CategoryAdapter(itemButtonList));
     }
 
     List<View> createButtonsFor(String category) {
@@ -75,6 +81,7 @@ public class GridViewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.w(TAG, label);
+                shoppingCart.add(label);
             }
         });
         TextView itemLabel = (TextView) itemButton.findViewById(R.id.item_label);
