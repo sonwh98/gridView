@@ -12,13 +12,12 @@ import android.view.View;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class GridViewActivity extends Activity {
     final static String TAG = "com.datayumyum.pos.GridViewActivity";
+    private ItemRepository itemRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,7 @@ public class GridViewActivity extends Activity {
         listView.setAdapter(shoppingCart);
 
         final String jsonCatalog = getStringReader();
-        final ItemRepository itemRepository = new ItemRepository(jsonCatalog);
+        itemRepository = new ItemRepository(jsonCatalog);
 
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
@@ -52,15 +51,36 @@ public class GridViewActivity extends Activity {
 
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new CategoryAdapter(this, itemRepository));
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                shoppingCart.add("foobar" + position);
-            }
-        });
+        List<View> itemButtonList = createButtonsFor("Entrees");
+        gridview.setAdapter(new CategoryAdapter(itemButtonList));
     }
 
+    List<View> createButtonsFor(String category) {
+        List<Item> itemList = itemRepository.groupItemByCategory(category);
+        List<View> buttonList = new ArrayList<View>();
+        for (Item item : itemList) {
+            String name = (String) item.get("name");
+            buttonList.add(createImageButton(name));
+        }
+        return buttonList;
+    }
+
+    View createImageButton(final String label) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View itemButton = inflater.inflate(R.layout.item_button, null);
+        ImageButton imageButton = (ImageButton) itemButton.findViewById(R.id.item_image_button);
+        int i = new Random().nextInt(mThumbIds.length - 1);
+        imageButton.setImageResource(mThumbIds[i]);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.w(TAG, label);
+            }
+        });
+        TextView itemLabel = (TextView) itemButton.findViewById(R.id.item_label);
+        itemLabel.setText(label);
+        return itemButton;
+    }
 
     private String getStringReader() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.catalog)));
@@ -150,4 +170,18 @@ public class GridViewActivity extends Activity {
             notifyDataSetChanged();
         }
     }
+
+    private Integer[] mThumbIds = {
+            R.drawable.sample_2, R.drawable.sample_3,
+            R.drawable.sample_4, R.drawable.sample_5,
+            R.drawable.sample_6, R.drawable.sample_7,
+            R.drawable.sample_0, R.drawable.sample_1,
+            R.drawable.sample_2, R.drawable.sample_3,
+            R.drawable.sample_4, R.drawable.sample_5,
+            R.drawable.sample_6, R.drawable.sample_7,
+            R.drawable.sample_0, R.drawable.sample_1,
+            R.drawable.sample_2, R.drawable.sample_3,
+            R.drawable.sample_4, R.drawable.sample_5,
+            R.drawable.sample_6, R.drawable.sample_7
+    };
 }
