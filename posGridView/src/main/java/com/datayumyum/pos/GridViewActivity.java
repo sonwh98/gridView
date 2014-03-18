@@ -168,6 +168,17 @@ public class GridViewActivity extends Activity {
         }
 
         public void add(String str) {
+
+            for (Map line : lineItems) {
+                String description = (String) line.get("description");
+                if (description.equals(str)) {
+                    int quantity = Integer.parseInt((String) line.get("quantity")) + 1;
+                    line.put("quantity", String.valueOf(quantity));
+                    notifyDataSetChanged();
+                    return;
+                }
+            }
+
             HashMap<String, String> item = new HashMap<String, String>();
             item.put("quantity", "1");
             item.put("description", str);
@@ -177,9 +188,18 @@ public class GridViewActivity extends Activity {
             notifyDataSetChanged();
         }
 
-        public void add(Item item) {
-
-        }
+//        public void add(Item item) {
+//            for (Map line : lineItems) {
+//                String name = (String) line.get("name");
+//                if (name.equals(item.get("name"))) {
+//                    int quantity = Integer.parseInt((String) line.get("quantity")) + 1;
+//                    line.put("quantity", String.valueOf(quantity));
+//                    return;
+//                }
+//            }
+//
+//            add((String) item.get("name"));
+//        }
     }
 
     private Integer[] mThumbIds = {
