@@ -168,10 +168,10 @@ public class GridViewActivity extends Activity {
         }
 
         public void add(Item item) {
-            String str = (String) item.get("name");
+            String itemName = (String) item.get("name");
             for (Map line : lineItems) {
                 String description = (String) line.get("description");
-                if (description.equals(str)) {
+                if (description.equals(itemName)) {
                     int quantity = Integer.parseInt((String) line.get("quantity")) + 1;
                     line.put("quantity", String.valueOf(quantity));
                     notifyDataSetChanged();
@@ -181,9 +181,9 @@ public class GridViewActivity extends Activity {
 
             HashMap<String, String> lineItem = new HashMap<String, String>();
             lineItem.put("quantity", "1");
-            lineItem.put("description", str);
+            lineItem.put("description", itemName);
             lineItem.put("price", String.valueOf(item.get("price")));
-            lineItem.put("subTotal", str);
+            lineItem.put("subTotal", "$5.00");
             lineItems.add(lineItem);
             notifyDataSetChanged();
         }
