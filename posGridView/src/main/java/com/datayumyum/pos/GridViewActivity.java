@@ -25,7 +25,7 @@ public class GridViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid_view);
 
-        final String jsonCatalog = getStringReader();
+        final String jsonCatalog = readJsonCatalog();
         itemRepository = new ItemRepository(jsonCatalog);
         shoppingCart = new ShoppingCart();
 
@@ -61,7 +61,7 @@ public class GridViewActivity extends Activity {
         listView.setOnScrollListener(touchListener.makeScrollListener());
     }
 
-    List<View> createButtonsFor(String category) {
+    private List<View> createButtonsFor(String category) {
         List<Item> itemList = itemRepository.groupItemByCategory(category);
         List<View> buttonList = new ArrayList<View>();
         for (Item item : itemList) {
@@ -71,7 +71,7 @@ public class GridViewActivity extends Activity {
         return buttonList;
     }
 
-    View createImageButton(final String label) {
+    private View createImageButton(final String label) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View itemButton = inflater.inflate(R.layout.item_button, null);
         ImageButton imageButton = (ImageButton) itemButton.findViewById(R.id.item_image_button);
@@ -89,7 +89,7 @@ public class GridViewActivity extends Activity {
         return itemButton;
     }
 
-    private String getStringReader() {
+    private String readJsonCatalog() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.catalog)));
         String json = "";
         try {
