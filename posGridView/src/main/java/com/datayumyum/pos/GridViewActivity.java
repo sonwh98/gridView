@@ -65,13 +65,13 @@ public class GridViewActivity extends Activity {
         List<Item> itemList = itemRepository.groupItemByCategory(category);
         List<View> buttonList = new ArrayList<View>();
         for (Item item : itemList) {
-            String name = (String) item.get("name");
-            buttonList.add(createImageButton(name));
+            buttonList.add(createItemButton(item));
         }
         return buttonList;
     }
 
-    private View createImageButton(final String label) {
+    private View createItemButton(final Item item) {
+        final String label = (String) item.get("name");
         LayoutInflater inflater = LayoutInflater.from(this);
         View itemButton = inflater.inflate(R.layout.item_button, null);
         ImageButton imageButton = (ImageButton) itemButton.findViewById(R.id.item_image_button);
@@ -81,7 +81,7 @@ public class GridViewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.w(TAG, label);
-                shoppingCart.add(label);
+                shoppingCart.add(item);
             }
         });
         TextView itemLabel = (TextView) itemButton.findViewById(R.id.item_label);
@@ -156,7 +156,7 @@ public class GridViewActivity extends Activity {
             HashMap<String, String> map = lineItems.get(position);
             textViewMap.get("quantity").setText(map.get("quantity"));
             textViewMap.get("description").setText(map.get("description"));
-            textViewMap.get("price").setText(map.get("price"));
+            textViewMap.get("price").setText(String.valueOf(map.get("price")));
             textViewMap.get("subTotal").setText(map.get("subTotal"));
 
             return convertView;
@@ -167,8 +167,8 @@ public class GridViewActivity extends Activity {
             notifyDataSetChanged();
         }
 
-        public void add(String str) {
-
+        public void add(Item item) {
+            String str = (String) item.get("name");
             for (Map line : lineItems) {
                 String description = (String) line.get("description");
                 if (description.equals(str)) {
@@ -179,12 +179,12 @@ public class GridViewActivity extends Activity {
                 }
             }
 
-            HashMap<String, String> item = new HashMap<String, String>();
-            item.put("quantity", "1");
-            item.put("description", str);
-            item.put("price", str);
-            item.put("subTotal", str);
-            lineItems.add(item);
+            HashMap<String, String> lineItem = new HashMap<String, String>();
+            lineItem.put("quantity", "1");
+            lineItem.put("description", str);
+            lineItem.put("price", String.valueOf(item.get("price")));
+            lineItem.put("subTotal", str);
+            lineItems.add(lineItem);
             notifyDataSetChanged();
         }
 
