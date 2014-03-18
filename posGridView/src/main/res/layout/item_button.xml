@@ -2,15 +2,15 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
-        android:weightSum="1">
+        android:weightSum="1"
+       >
     <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/item_image_button" android:layout_gravity="center_horizontal" android:layout_weight="0.28"/>
+            android:layout_width="50pt"
+            android:layout_height="50pt"
+            android:id="@+id/item_image_button" android:layout_gravity="center_horizontal" />
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/item_label" android:layout_gravity="center_horizontal" android:layout_weight="0.28"/>
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/item_label" android:layout_gravity="center_horizontal" android:layout_weight="0.28" android:layout_marginBottom="10pt"/>
 </LinearLayout>
