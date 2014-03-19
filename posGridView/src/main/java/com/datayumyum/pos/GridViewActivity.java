@@ -1,8 +1,10 @@
 package com.datayumyum.pos;
 
+import android.animation.ValueAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
 import android.widget.*;
 
 import android.app.Activity;
@@ -74,13 +76,25 @@ public class GridViewActivity extends Activity {
         final String label = (String) item.get("name");
         LayoutInflater inflater = LayoutInflater.from(this);
         View itemButton = inflater.inflate(R.layout.item_button, null);
-        ImageButton imageButton = (ImageButton) itemButton.findViewById(R.id.item_image_button);
+        final ImageButton imageButton = (ImageButton) itemButton.findViewById(R.id.item_image_button);
         String imageURL = (String) item.get("imageURL");
         new DownloadImageTask(imageButton).execute(imageURL);
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.w(TAG, label);
+                ValueAnimator bounceAnimator = ValueAnimator.ofInt(0, imageButton.getHeight());
+                bounceAnimator.setDuration(500);
+                bounceAnimator.setInterpolator(new BounceInterpolator());
+                bounceAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        Integer value = (Integer) animation.getAnimatedValue();
+                        imageButton.getLayoutParams().height = value.intValue();
+                        imageButton.requestLayout();
+                    }
+                });
+                bounceAnimator.start();
                 shoppingCart.add(item);
             }
         });
