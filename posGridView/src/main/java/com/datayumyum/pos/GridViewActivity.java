@@ -75,8 +75,8 @@ public class GridViewActivity extends Activity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View itemButton = inflater.inflate(R.layout.item_button, null);
         ImageButton imageButton = (ImageButton) itemButton.findViewById(R.id.item_image_button);
-        int i = new Random().nextInt(mThumbIds.length - 1);
-        imageButton.setImageResource(mThumbIds[i]);
+        String imageURL = (String) item.get("imageURL");
+        new DownloadImageTask(imageButton).execute(imageURL);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
